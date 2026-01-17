@@ -5,7 +5,9 @@ import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Image, Link } from "@/tw";
+import { usePathname } from "expo-router";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import { Ionicons } from "@expo/vector-icons";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +16,12 @@ export default function Layout() {
   return (
     <QueryClientProvider client={queryClient}>
       <View className="flex flex-1 bg-white">
-        <Header />
-        <Slot />
-        <Footer />
+        {/* <Header /> */}
+        <View className="flex-1">
+          <Slot />
+        </View>
+        <BottomNav />
+        {/* <Footer /> */}
       </View>
     </QueryClientProvider>
   );
@@ -27,33 +32,68 @@ function Header() {
   return (
     <View style={{ paddingTop: top }}>
       <View className="px-4 lg:px-6 h-14 flex items-center flex-row">
-        <Image
-          source="https://simpleicons.org/icons/expo.svg"
-          className="w-6 h-6 object-contain mr-2"
-        />
-        <Link className="font-bold flex-1 items-center justify-center" href="/">
-          ACME
-        </Link>
         <View className="flex flex-row gap-4 sm:gap-6">
-          <Link
-            className="text-md font-medium hover:underline web:underline-offset-4"
-            href="/"
-          >
-            About
-          </Link>
-          <Link
-            className="text-md font-medium hover:underline web:underline-offset-4"
-            href="/"
-          >
-            Product
-          </Link>
-          <Link
-            className="text-md font-medium hover:underline web:underline-offset-4"
-            href="/"
-          >
-            Pricing
-          </Link>
         </View>
+      </View>
+    </View>
+  );
+}
+
+function BottomNav() {
+  const pathname = usePathname();
+
+  const items = [
+    { href: "/", label: "首页", icon: "home-outline", activeIcon: "home" },
+    {
+      href: "/events",
+      label: "活动",
+      icon: "albums-outline",
+      activeIcon: "albums",
+    },
+    {
+      href: "/user",
+      label: "我的",
+      icon: "person-outline",
+      activeIcon: "person",
+    },
+  ];
+
+  return (
+    <View className="flex border-t border-gray-200 bg-white">
+      <View className="flex flex-row justify-around py-2">
+        {items.map((item) => {
+          const isActive =
+            pathname === item.href ||
+            (item.href !== "/" && pathname.startsWith(item.href));
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href as any}
+              className="flex-1"
+              asChild
+            >
+              <View className="flex-1 items-center justify-center gap-1">
+                <Ionicons
+                  name={
+                    (isActive ? item.activeIcon : item.icon) as keyof typeof Ionicons.glyphMap
+                  }
+                  size={22}
+                  color={isActive ? "#111827" : "#6B7280"}
+                />
+                <Text
+                  className={
+                    isActive
+                      ? "text-sm font-semibold text-gray-900"
+                      : "text-sm text-gray-500"
+                  }
+                >
+                  {item.label}
+                </Text>
+              </View>
+            </Link>
+          );
+        })}
       </View>
     </View>
   );

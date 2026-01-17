@@ -1,5 +1,6 @@
 import {useQuery, type UseQueryOptions, type UseQueryResult} from '@tanstack/react-query';
 import {get} from './client';
+import { EventsRoot } from './types';
 
 type QueryConfig<TData, TError = Error> = Omit<UseQueryOptions<TData, TError, TData>, 'queryKey' | 'queryFn'>;
 
@@ -68,15 +69,27 @@ export function useSubGenreQuery<T = unknown>(id: string, params?: { locale?: st
   });
 }
 
-export function getEvent<T = unknown>(id: string, params?: { locale?: string; domain?: string }) {
+export function getEvent<T = EventsRoot>(id: string, params?: { locale?: string; domain?: string }) {
   return get<T>(`/discovery/v2/events/${id}`, params);
 }
 
-export function useEventQuery<T = unknown>(id: string, params?: { locale?: string; domain?: string }, config?: QueryConfig<T>): UseQueryResult<T, Error> {
+export function useEventQuery<T = EventsRoot>(id: string, params?: { locale?: string; domain?: string }, config?: QueryConfig<T>): UseQueryResult<T, Error> {
   return useQuery<T, Error>({
     queryKey: ['event', id, params],
     queryFn: () => getEvent<T>(id, params),
     enabled: !!id,
+    ...config,
+  });
+}
+
+export function searchEvents<T = unknown>(params?: { keyword?: string; size?: number; page?: number; locale?: string; domain?: string }) {
+  return get<T>("/discovery/v2/events", params);
+}
+
+export function useEventsQuery<T = unknown>(params?: { keyword?: string; size?: number; page?: number; locale?: string; domain?: string }, config?: QueryConfig<T>): UseQueryResult<T, Error> {
+  return useQuery<T, Error>({
+    queryKey: ['events', params],
+    queryFn: () => searchEvents<T>(params),
     ...config,
   });
 }

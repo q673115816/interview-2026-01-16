@@ -7,22 +7,29 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build": "expo build:web",
     "deploy": "npx expo export -p web && npx eas-cli@latest deploy"
   },
   "resolutions": {
     "lightningcss": "1.30.1"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.4.14",
+    "@expo/vector-icons": "^15.0.3",
+    "@supabase/supabase-js": "^2.90.1",
     "@tailwindcss/postcss": "^4.1.11",
     "@tanstack/react-query": "^5.90.18",
     "axios": "^1.13.2",
+    "better-auth": "^1.4.14",
     "expo": "^54.0.1",
     "expo-constants": "~18.0.8",
     "expo-image": "^3.0.10",
     "expo-linking": "~8.0.7",
     "expo-router": "~6.0.0",
+    "expo-secure-store": "^15.0.8",
     "expo-splash-screen": "~31.0.8",
     "expo-status-bar": "~3.0.7",
+    "lodash-es": "^4.17.22",
     "nativewind": "5.0.0-preview.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -33,6 +40,7 @@
     "react-native-screens": "~4.16.0",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.5.1",
+    "rxjs": "^7.8.2",
     "tailwindcss": "^4.1.17",
     "zustand": "^5.0.10"
   },
