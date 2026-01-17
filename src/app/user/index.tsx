@@ -2,17 +2,22 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import { useSession, signIn, signOut } from "@/auth/client";
+import { useStore } from "@/store";
 
 export default function UserPage() {
   const { data, isPending } = useSession();
   const user = data?.user;
+  const storeUser = useStore((state) => state.user);
+  const currentUser = user ?? storeUser;
   const displayName =
-    user && typeof user.user_metadata === "object"
-      ? (user.user_metadata as { name?: string; full_name?: string }).name ??
-        (user.user_metadata as { name?: string; full_name?: string }).full_name ??
+    currentUser && typeof currentUser.user_metadata === "object"
+      ? (currentUser.user_metadata as { name?: string; full_name?: string }).name ??
+        (currentUser.user_metadata as { name?: string; full_name?: string }).full_name ??
         null
       : null;
   const [loadingProvider, setLoadingProvider] = React.useState<"github" | "google" | null>(null);
+  const setUser = useStore((state) => state.setUser);
+  const clearUser = useStore((state) => state.clearUser);
 
   const handleSocialSignIn = React.useCallback(
     async (provider: "github" | "google") => {
@@ -32,7 +37,19 @@ export default function UserPage() {
     await signOut();
   }, []);
 
-  if (isPending) {
+  React.useEffect(() => {
+    if (isPending) {
+      return;
+    }
+
+    if (user) {
+      setUser(user);
+    } else {
+      clearUser();
+    }
+  }, [isPending, user, setUser, clearUser]);
+
+  if (isPending && !currentUser) {
     return (
       <View className="flex-1 items-center justify-center">
         <Text>Loading user...</Text>
@@ -40,7 +57,7 @@ export default function UserPage() {
     );
   }
 
-  if (!user) {
+  if (!currentUser) {
     return (
       <View className="flex-1 items-center justify-center px-4">
         <Text className="text-lg font-semibold mb-4">
@@ -83,9 +100,9 @@ export default function UserPage() {
     <View className="flex-1 px-4 py-6">
       <Text className="text-2xl font-bold mb-4">用户信息</Text>
       <View className="gap-2 mb-6">
-        <Text className="text-base">ID: {user.id}</Text>
-        {user.email ? (
-          <Text className="text-base">邮箱: {user.email}</Text>
+        <Text className="text-base">ID: {currentUser.id}</Text>
+        {currentUser.email ? (
+          <Text className="text-base">邮箱: {currentUser.email}</Text>
         ) : null}
         {displayName ? <Text className="text-base">昵称: {displayName}</Text> : null}
       </View>
