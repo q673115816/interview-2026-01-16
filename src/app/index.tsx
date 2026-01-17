@@ -6,7 +6,9 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { useReset, useStore } from "@/store";
 
-
+if (process.env.NODE_ENV === "production") {
+  console.log("EXPO_PUBLIC_SUPABASE_URL", process.env.EXPO_PUBLIC_SUPABASE_URL);
+}
 
 export default function Page() {
   const { items, addItem } = useStore(
