@@ -21,10 +21,8 @@ export function useSession() {
     let active = true;
 
     async function load() {
-      console.log("[useSession] getUser start");
-      const { data, error } = await supabase.auth.getUser();
-      console.log("[useSession] getUser done", { hasError: !!error, hasUser: !!data?.user });
-      console.log(data, error)
+      const { data, error } = await supabase.auth.getSession();
+
       if (!active) {
         return;
       }
@@ -32,7 +30,7 @@ export function useSession() {
       if (error) {
         setData({ user: null });
       } else {
-        setData({ user: data.user ?? null });
+        setData({ user: data.session?.user ?? null });
       }
 
       setIsPending(false);
