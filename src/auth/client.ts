@@ -22,9 +22,9 @@ export function useSession() {
 
     async function load() {
       console.log("[useSession] getUser start");
-  const { data, error } = await supabase.auth.getUser();
-  console.log("[useSession] getUser done", { hasError: !!error, hasUser: !!data?.user });
-
+      const { data, error } = await supabase.auth.getUser();
+      console.log("[useSession] getUser done", { hasError: !!error, hasUser: !!data?.user });
+      console.log(data, error)
       if (!active) {
         return;
       }
