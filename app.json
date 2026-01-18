@@ -1,6 +1,6 @@
 {
   "expo": {
-    "scheme": "myapp",
+    "scheme": "interview",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
     "web": {
@@ -10,6 +10,16 @@
       "expo-router"
     ],
     "name": "my-app",
-    "slug": "my-app"
+    "slug": "my-app",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c2738c22-1866-4ed3-b5c2-62040bcd9cb6"
+      }
+    },
+    "owner": "q673115816",
+    "android": {
+      "package": "com.q673115816.myapp"
+    }
   }
 }

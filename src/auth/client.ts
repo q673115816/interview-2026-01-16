@@ -65,7 +65,7 @@ export const signIn = {
     // Web implementation
     if (Platform.OS === "web") {
       const redirectTo =
-        typeof window !== "undefined" ? window.location.origin : undefined;
+        typeof window !== "undefined" ? window.location.href : undefined;
 
       await supabase.auth.signInWithOAuth({
         provider,
