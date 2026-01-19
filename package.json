@@ -10,8 +10,8 @@
     "build": "expo export -p web",
     "build:android": "npx eas-cli@latest build --platform android",
     "build:ios": "npx eas-cli@latest build --platform ios",
-     "build:android:local": "npx eas-cli@latest build --platform android --local",
-     "build:ios:local": "npx eas-cli@latest build --platform ios --local",
+    "build:android:local": "npx eas-cli@latest build --platform android --local",
+    "build:ios:local": "npx eas-cli@latest build --platform ios --local",
     "deploy": "npx expo export -p web && npx eas-cli@latest deploy"
   },
   "resolutions": {
@@ -52,6 +52,7 @@
   "devDependencies": {
     "@types/react": "~19.1.10",
     "babel-plugin-inline-import": "^3.0.0",
+    "babel-preset-expo": "^54.0.9",
     "drizzle-kit": "^0.31.8",
     "eas-cli": "^16.28.0",
     "typescript": "~5.9.2"

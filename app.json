@@ -20,7 +20,10 @@
     },
     "owner": "q673115816",
     "android": {
-      "package": "com.q673115816.myapp"
+      "package": "com.q673115816.interview"
+    },
+    "ios": {
+      "bundleIdentifier": "com.q673115816.interview"
     }
   }
 }
