@@ -9,12 +9,13 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "interview",
+    "slug": "interview",
+    "icon": "./icon.png",
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "c2738c22-1866-4ed3-b5c2-62040bcd9cb6"
+        "projectId": "df87a29d-c11f-4759-af9e-5c841e0bc279"
       }
     },
     "owner": "q673115816",

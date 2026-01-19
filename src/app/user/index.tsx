@@ -1,8 +1,107 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import styled from "styled-components/native";
 
 import { useSession, signIn, signOut } from "@/auth/client";
 import { useStore } from "@/store";
+
+const LoadingContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LoginContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-horizontal: 16px;
+`;
+
+const LoginTitle = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+`;
+
+const ButtonGroup = styled.View`
+  width: 100%;
+  gap: 12px;
+`;
+
+const GithubButton = styled.TouchableOpacity`
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background-color: black;
+  padding-horizontal: 16px;
+  padding-vertical: 8px;
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
+`;
+
+const GithubButtonText = styled.Text`
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+`;
+
+const GoogleButton = styled.TouchableOpacity`
+  border-radius: 6px;
+  background-color: white;
+  padding-horizontal: 16px;
+  padding-vertical: 8px;
+  border-width: 1px;
+  border-color: #D1D5DB;
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
+`;
+
+const GoogleButtonText = styled.Text`
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+`;
+
+const LoadingText = styled.Text`
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6B7280;
+`;
+
+const UserContainer = styled.View`
+  flex: 1;
+  padding-horizontal: 16px;
+  padding-vertical: 24px;
+`;
+
+const UserTitle = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+`;
+
+const UserInfo = styled.View`
+  gap: 8px;
+  margin-bottom: 24px;
+`;
+
+const UserInfoText = styled.Text`
+  font-size: 16px;
+`;
+
+const LogoutButton = styled.TouchableOpacity`
+  border-radius: 6px;
+  background-color: #111827;
+  padding-horizontal: 16px;
+  padding-vertical: 8px;
+`;
+
+const LogoutButtonText = styled.Text`
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #F9FAFB;
+`;
 
 export default function UserPage() {
   const { data, isPending } = useSession();
@@ -51,71 +150,68 @@ export default function UserPage() {
 
   if (isPending && !currentUser) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <LoadingContainer>
         <Text>Loading user...</Text>
-      </View>
+      </LoadingContainer>
     );
   }
 
   if (!currentUser) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
-        <Text className="text-lg font-semibold mb-4">
+      <LoginContainer>
+        <LoginTitle>
           尚未登录
-        </Text>
-        <View className="w-full gap-3">
-          <TouchableOpacity
-            className="mb-2 rounded-md bg-black px-4 py-2"
+        </LoginTitle>
+        <ButtonGroup>
+          <GithubButton
             onPress={() => {
               void handleSocialSignIn("github");
             }}
             disabled={loadingProvider !== null}
           >
-            <Text className="text-center text-sm font-medium text-white">
+            <GithubButtonText>
               使用 GitHub 登录
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="rounded-md bg-white px-4 py-2 border border-gray-300"
+            </GithubButtonText>
+          </GithubButton>
+          <GoogleButton
             onPress={() => {
               void handleSocialSignIn("google");
             }}
             disabled={loadingProvider !== null}
           >
-            <Text className="text-center text-sm font-medium text-gray-900">
+            <GoogleButtonText>
               使用 Google 登录
-            </Text>
-          </TouchableOpacity>
-        </View>
+            </GoogleButtonText>
+          </GoogleButton>
+        </ButtonGroup>
         {loadingProvider && (
-          <Text className="mt-3 text-xs text-gray-500">
+          <LoadingText>
             正在跳转 {loadingProvider === "github" ? "GitHub" : "Google"} 授权页面…
-          </Text>
+          </LoadingText>
         )}
-      </View>
+      </LoginContainer>
     );
   }
 
   return (
-    <View className="flex-1 px-4 py-6">
-      <Text className="text-2xl font-bold mb-4">用户信息</Text>
-      <View className="gap-2 mb-6">
-        <Text className="text-base">ID: {currentUser.id}</Text>
+    <UserContainer>
+      <UserTitle>用户信息</UserTitle>
+      <UserInfo>
+        <UserInfoText>ID: {currentUser.id}</UserInfoText>
         {currentUser.email ? (
-          <Text className="text-base">邮箱: {currentUser.email}</Text>
+          <UserInfoText>邮箱: {currentUser.email}</UserInfoText>
         ) : null}
-        {displayName ? <Text className="text-base">昵称: {displayName}</Text> : null}
-      </View>
-      <TouchableOpacity
-        className="rounded-md bg-gray-900 px-4 py-2"
+        {displayName ? <UserInfoText>昵称: {displayName}</UserInfoText> : null}
+      </UserInfo>
+      <LogoutButton
         onPress={() => {
           void handleSignOut();
         }}
       >
-        <Text className="text-center text-sm font-medium text-gray-50">
+        <LogoutButtonText>
           退出登录
-        </Text>
-      </TouchableOpacity>
-    </View>
+        </LogoutButtonText>
+      </LogoutButton>
+    </UserContainer>
   );
 }

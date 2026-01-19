@@ -3,11 +3,19 @@ import { createClient, type User } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import { Platform } from "react-native";
+import { SQLiteStorage } from "./storage";
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: SQLiteStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 type SessionData = {
   user: User | null;
@@ -78,6 +86,7 @@ export const signIn = {
 
     // Native implementation
     const redirectTo = Linking.createURL("/");
+    console.log("[signIn.social] redirectTo", redirectTo);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,

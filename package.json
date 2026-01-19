@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "interview",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -8,6 +8,10 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "build": "expo export -p web",
+    "build:android": "npx eas-cli@latest build --platform android",
+    "build:ios": "npx eas-cli@latest build --platform ios",
+     "build:android:local": "npx eas-cli@latest build --platform android --local",
+     "build:ios:local": "npx eas-cli@latest build --platform ios --local",
     "deploy": "npx expo export -p web && npx eas-cli@latest deploy"
   },
   "resolutions": {
@@ -16,11 +20,12 @@
   "dependencies": {
     "@better-auth/expo": "^1.4.14",
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@supabase/supabase-js": "^2.90.1",
-    "@tailwindcss/postcss": "^4.1.11",
     "@tanstack/react-query": "^5.90.18",
     "axios": "^1.13.2",
     "better-auth": "^1.4.14",
+    "drizzle-orm": "^0.45.1",
     "expo": "^54.0.1",
     "expo-constants": "~18.0.8",
     "expo-image": "^3.0.10",
@@ -28,25 +33,26 @@
     "expo-router": "~6.0.0",
     "expo-secure-store": "^15.0.8",
     "expo-splash-screen": "~31.0.8",
+    "expo-sqlite": "^16.0.10",
     "expo-status-bar": "~3.0.7",
     "expo-web-browser": "^15.0.10",
     "lodash-es": "^4.17.22",
-    "nativewind": "5.0.0-preview.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
-    "react-native-css": "^3.0.0",
     "react-native-reanimated": "~4.1.0",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.5.1",
     "rxjs": "^7.8.2",
-    "tailwindcss": "^4.1.17",
+    "styled-components": "^6.1.11",
     "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@types/react": "~19.1.10",
+    "babel-plugin-inline-import": "^3.0.0",
+    "drizzle-kit": "^0.31.8",
     "eas-cli": "^16.28.0",
     "typescript": "~5.9.2"
   },

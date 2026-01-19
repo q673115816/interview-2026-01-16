@@ -232,6 +232,10 @@ export interface Venue2 {
   upcomingEvents: UpcomingEvents
   ada: Ada
   _links: Links2
+  state: {
+    stateCode: string
+    name: string
+  }
 }
 
 export interface Image2 {
