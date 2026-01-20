@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { searchEvents, useAttractionQuery } from "@/api";
 import { EventsRoot } from "@/api/types";
+import { formatDate, formatTime } from "@/utils/format";
 
 const Container = styled.View`
   flex: 1;
@@ -192,32 +193,6 @@ const BadgeText = styled.Text`
   font-weight: 500;
 `;
 
-const formatDate = (date?: string) => {
-  if (!date) {
-    return "";
-  }
-  try {
-    return new Date(date).toLocaleDateString("zh-CN", {
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-    });
-  } catch {
-    return date;
-  }
-};
-
-const formatTime = (time?: string) => {
-  if (!time) {
-    return "";
-  }
-  try {
-    const [h, m] = time.split(":");
-    return `${h}:${m}`;
-  } catch {
-    return time;
-  }
-};
 
 export default function EventsPage() {
   const [keyword, setKeyword] = React.useState("");
