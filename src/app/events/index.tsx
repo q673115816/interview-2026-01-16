@@ -38,6 +38,7 @@ const SearchInput = styled.TextInput`
   font-size: 15px;
   text-align-vertical: center;
   height: 40px;
+  padding-vertical: 0px;
 `;
 
 const LoadingContainer = styled.View`
