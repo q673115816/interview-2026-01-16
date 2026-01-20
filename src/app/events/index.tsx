@@ -287,7 +287,12 @@ export default function EventsPage() {
         keyExtractor={(item) => item.id}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
+          // Pre-fetch when reaching the 10th item from the bottom
+          if (index === events.length - 10) {
+            handleEndReached();
+          }
+
           const date = item.dates?.start?.localDate ?? "";
           const time = item.dates?.start?.localTime ?? "";
           const status = item.dates?.status?.code ?? "";
