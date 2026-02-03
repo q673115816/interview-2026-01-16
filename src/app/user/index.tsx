@@ -1,9 +1,55 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, Platform } from "react-native";
 import styled from "styled-components/native";
 
-import { useSession, signIn, signOut } from "@/auth/client";
+import { useSession, signIn, signOut, supabase } from "@/auth/client";
 import { useStore } from "@/store";
+
+function GoogleOneTap() {
+  React.useEffect(() => {
+    if (Platform.OS !== "web") return;
+
+    const scriptId = "google-one-tap-script";
+    if (document.getElementById(scriptId)) return;
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.id = scriptId;
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      // @ts-ignore
+      if (!window.google) return;
+
+      const clientId = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID;
+      if (!clientId) {
+        console.warn("Google Client ID not found. One Tap disabled.");
+        return;
+      }
+
+      // @ts-ignore
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async (response: any) => {
+          const { error } = await supabase.auth.signInWithIdToken({
+            provider: "google",
+            token: response.credential,
+          });
+          if (error) {
+            console.error("Google One Tap Error:", error);
+          }
+        },
+      });
+
+      // @ts-ignore
+      window.google.accounts.id.prompt();
+    };
+  }, []);
+
+  return null;
+}
 
 const LoadingContainer = styled.View`
   flex: 1;
@@ -159,6 +205,7 @@ export default function UserPage() {
   if (!currentUser) {
     return (
       <LoginContainer>
+        <GoogleOneTap />
         <LoginTitle>
           尚未登录
         </LoginTitle>
