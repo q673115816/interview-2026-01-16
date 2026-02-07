@@ -5,6 +5,7 @@ import { Link } from "expo-router";
 import { Image } from "expo-image";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 import { searchEvents, useAttractionQuery } from "@/api";
 import { EventsRoot } from "@/api/types";
@@ -195,6 +196,7 @@ const BadgeText = styled.Text`
 
 
 export default function EventsPage() {
+  const { t } = useTranslation();
   const [keyword, setKeyword] = React.useState("");
   const [searchKeyword, setSearchKeyword] = React.useState("");
 
@@ -251,7 +253,7 @@ export default function EventsPage() {
     <Container>
       <SearchContainer>
         <SearchInput
-          placeholder="搜索活动"
+          placeholder={t("common.searchPlaceholder")}
           placeholderTextColor="#9CA3AF"
           value={keyword}
           onChangeText={(text) => {
@@ -271,14 +273,14 @@ export default function EventsPage() {
       {isError ? (
         <ErrorContainer>
           <ErrorText>
-            Failed to load events. Please try again.
+            {t("common.errorLoadingEvents")}
           </ErrorText>
           <RetryButton
             onPress={() => {
               refetch();
             }}
           >
-            <RetryButtonText>Retry</RetryButtonText>
+            <RetryButtonText>{t("common.retry")}</RetryButtonText>
           </RetryButton>
         </ErrorContainer>
       ) : null}
@@ -374,13 +376,13 @@ export default function EventsPage() {
                   {salesPublic ? (
                     <Badge>
                       <BadgeText>
-                        公售 {new Date(salesPublic.startDateTime).toLocaleDateString()}
+                        {t("event.publicSale")} {new Date(salesPublic.startDateTime).toLocaleDateString()}
                       </BadgeText>
                     </Badge>
                   ) : null}
                   {presales.length > 0 ? (
                     <Badge>
-                      <BadgeText>预售 {presales.length} 场</BadgeText>
+                      <BadgeText>{t("event.presale")} {presales.length} {t("event.shows")}</BadgeText>
                     </Badge>
                   ) : null}
                   {hasSafeTix ? (
@@ -390,12 +392,12 @@ export default function EventsPage() {
                   ) : null}
                   {hasAllInclusive ? (
                     <Badge>
-                      <BadgeText>含所有费用</BadgeText>
+                      <BadgeText>{t("event.allInclusive")}</BadgeText>
                     </Badge>
                   ) : null}
                   {hasAgeRestriction ? (
                     <Badge>
-                      <BadgeText>年龄限制</BadgeText>
+                      <BadgeText>{t("event.ageRestriction")}</BadgeText>
                     </Badge>
                   ) : null}
                 </BadgeRow>
@@ -409,7 +411,7 @@ export default function EventsPage() {
         }}
         ListEmptyComponent={
           !isLoading && !isError ? (
-            <EmptyText>No events found.</EmptyText>
+            <EmptyText>{t("common.noEvents")}</EmptyText>
           ) : null
         }
         ListFooterComponent={
@@ -425,6 +427,7 @@ export default function EventsPage() {
 }
 
 function AttractionPreview({ id }: { id: string }) {
+  const { t } = useTranslation();
   const { data, isLoading, isError } = useAttractionQuery<any>(id, undefined, {
     enabled: !!id,
   });
@@ -441,7 +444,7 @@ function AttractionPreview({ id }: { id: string }) {
 
   return (
     <AttractionText numberOfLines={1}>
-      演出方: {name}
+      {t("event.performer")}: {name}
     </AttractionText>
   );
 }

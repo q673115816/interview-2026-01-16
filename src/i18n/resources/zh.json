@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "login": "登录",
+    "logout": "退出登录",
+    "continueWith": "使用 {{provider}} 继续",
+    "redirecting": "正在跳转到 {{provider}}...",
+    "retry": "重试",
+    "searchPlaceholder": "搜索活动",
+    "noEvents": "未找到活动。",
+    "errorLoadingEvents": "加载活动失败，请重试。",
+    "missingEventId": "缺少活动 ID。",
+    "errorLoadingEventDetails": "无法加载活动详情，请稍后重试。"
+  },
+  "nav": {
+    "home": "首页",
+    "events": "活动",
+    "user": "我的"
+  },
+  "home": {
+    "title": "Ticketmaster 活动浏览",
+    "subtitle": "浏览列表中的活动并查看详情。",
+    "viewEvents": "查看活动列表"
+  },
+  "event": {
+    "details": "活动详情",
+    "performer": "艺人",
+    "publicSale": "公开发售",
+    "presale": "预售",
+    "shows": "场演出",
+    "allInclusive": "全包价格",
+    "ageRestriction": "年龄限制",
+    "dateTime": "日期与时间",
+    "venue": "场馆",
+    "lineup": "演出阵容",
+    "ticketInfo": "票务信息",
+    "priceRange": "价格区间",
+    "publicSaleTime": "公开发售时间",
+    "presaleEvents": "预售活动",
+    "ticketLimit": "限购政策",
+    "additionalInfo": "其他信息",
+    "promoter": "主办方",
+    "eventInfo": "活动简介",
+    "pleaseNote": "注意",
+    "seatmap": "座位图",
+    "buyTickets": "购买门票"
+  },
+  "user": {
+    "notLoggedIn": "未登录",
+    "welcome": "欢迎, {{name}}",
+    "profile": "用户资料",
+    "id": "ID",
+    "email": "邮箱",
+    "name": "姓名",
+    "language": "语言",
+    "switchLanguage": "切换语言",
+    "system": "跟随系统"
+  }
+}

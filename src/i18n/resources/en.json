@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "login": "Login",
+    "logout": "Logout",
+    "continueWith": "Continue with {{provider}}",
+    "redirecting": "Redirecting to {{provider}}...",
+    "retry": "Retry",
+    "searchPlaceholder": "Search events",
+    "noEvents": "No events found.",
+    "errorLoadingEvents": "Failed to load events. Please try again.",
+    "missingEventId": "Missing event id.",
+    "errorLoadingEventDetails": "Failed to load event details. Please try again later."
+  },
+  "nav": {
+    "home": "Home",
+    "events": "Events",
+    "user": "User"
+  },
+  "home": {
+    "title": "Ticketmaster Event Browser",
+    "subtitle": "Browse events in the list page and view details.",
+    "viewEvents": "View Events List"
+  },
+  "event": {
+    "details": "Event Details",
+    "performer": "Performer",
+    "publicSale": "Public Sale",
+    "presale": "Presale",
+    "shows": "shows",
+    "allInclusive": "All Inclusive Pricing",
+    "ageRestriction": "Age Restriction",
+    "dateTime": "Date & Time",
+    "venue": "Venue",
+    "lineup": "Lineup",
+    "ticketInfo": "Ticket Info",
+    "priceRange": "Price Range",
+    "publicSaleTime": "Public Sale Time",
+    "presaleEvents": "Presale Events",
+    "ticketLimit": "Ticket Limit",
+    "additionalInfo": "Additional Info",
+    "promoter": "Promoter",
+    "eventInfo": "Event Info",
+    "pleaseNote": "Please Note",
+    "seatmap": "Seatmap",
+    "buyTickets": "Buy Tickets"
+  },
+  "user": {
+    "notLoggedIn": "Not Logged In",
+    "welcome": "Welcome, {{name}}",
+    "profile": "User Profile",
+    "id": "ID",
+    "email": "Email",
+    "name": "Name",
+    "language": "Language",
+    "switchLanguage": "Switch Language",
+    "system": "System Default"
+  }
+}

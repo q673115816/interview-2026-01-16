@@ -1,7 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { useTranslation } from "react-i18next";
 
+import "@/i18n";
 import { Link, Slot, usePathname, useRouter } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,16 +11,16 @@ import { Ionicons } from "@expo/vector-icons";
 const queryClient = new QueryClient();
 
 const NAV_ITEMS = [
-  { href: "/", label: "首页", icon: "home-outline", activeIcon: "home" },
+  { href: "/", label: "nav.home", icon: "home-outline", activeIcon: "home" },
   {
     href: "/events",
-    label: "活动",
+    label: "nav.events",
     icon: "albums-outline",
     activeIcon: "albums",
   },
   {
     href: "/user",
-    label: "我的",
+    label: "nav.user",
     icon: "person-outline",
     activeIcon: "person",
   },
@@ -123,6 +125,7 @@ export default function Layout() {
 }
 
 function Header() {
+  const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
   const pathname = usePathname();
   const router = useRouter();
@@ -132,20 +135,20 @@ function Header() {
   let title: string | undefined;
 
   if (segments.length === 0) {
-    title = NAV_ITEMS[0]?.label;
+    title = t(NAV_ITEMS[0]?.label);
   } else {
     const topSegment = `/${segments[0]}`;
     const matched = NAV_ITEMS.find((item) => item.href === topSegment);
 
     if (matched && segments.length === 1) {
-      title = matched.label;
+      title = t(matched.label);
     } else if (segments[0] === "events" && segments.length > 1) {
-      title = "活动详情";
+      title = t("event.details");
     }
   }
 
   if (!title) {
-    title = "Ticketmaster 活动浏览";
+    title = t("home.title");
   }
 
   const showBack = segments.length > 1;
@@ -171,6 +174,7 @@ function Header() {
 }
 
 function BottomNav() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const { bottom } = useSafeAreaInsets();
 
@@ -193,7 +197,7 @@ function BottomNav() {
                   color={isActive ? "#111827" : "#6B7280"}
                 />
                 <NavText isActive={isActive}>
-                  {item.label}
+                  {t(item.label)}
                 </NavText>
               </NavItem>
             </Link>

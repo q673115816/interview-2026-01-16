@@ -4,6 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useStore } from "@/store";
 import { Image } from "expo-image";
 import styled from "styled-components/native";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.View`
   flex: 1;
@@ -60,6 +61,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export default function Page() {
+  const { t } = useTranslation();
   const { items, addItem } = useStore(
     useShallow(({ addItem, items }) => ({
       items,
@@ -71,15 +73,15 @@ export default function Page() {
     <Container>
       <Content>
         <IconImage source={require("@/../icon.png")} />
-        <Title role="heading">Ticketmaster 活动浏览</Title>
+        <Title role="heading">{t("home.title")}</Title>
         <Subtitle>
-          在列表页中浏览活动，并进入详情页查看详细信息。
+          {t("home.subtitle")}
         </Subtitle>
 
         <ButtonContainer>
           <Link href="/events" asChild>
             <StyledButton>
-              <ButtonText>查看活动列表</ButtonText>
+              <ButtonText>{t("home.viewEvents")}</ButtonText>
             </StyledButton>
           </Link>
         </ButtonContainer>

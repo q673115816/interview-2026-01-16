@@ -1,6 +1,9 @@
 import React from "react";
 import { Text, TouchableOpacity, View, Platform } from "react-native";
 import styled from "styled-components/native";
+import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Localization from "expo-localization";
 
 import { useSession, signIn, signOut, supabase } from "@/auth/client";
 import { useStore } from "@/store";
@@ -149,7 +152,29 @@ const LogoutButtonText = styled.Text`
   color: #F9FAFB;
 `;
 
+const LanguageContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+`;
+
+const LanguageButton = styled.TouchableOpacity<{ active: boolean }>`
+  padding-horizontal: 12px;
+  padding-vertical: 6px;
+  border-radius: 999px;
+  background-color: ${({ active }) => (active ? "#E5E7EB" : "transparent")};
+`;
+
+const LanguageText = styled.Text<{ active: boolean }>`
+  font-size: 14px;
+  font-weight: ${({ active }) => (active ? "600" : "400")};
+  color: #111827;
+`;
+
 export default function UserPage() {
+  const { t, i18n } = useTranslation();
   const { data, isPending } = useSession();
   const user = data?.user;
   const storeUser = useStore((state) => state.user);
@@ -182,6 +207,34 @@ export default function UserPage() {
     await signOut();
   }, []);
 
+  const [isSystemLanguage, setIsSystemLanguage] = React.useState(false);
+
+  React.useEffect(() => {
+    AsyncStorage.getItem("user-language").then((val) => {
+      setIsSystemLanguage(val === null);
+    });
+  }, []);
+
+  const changeLanguage = React.useCallback(
+    async (lang: string | null) => {
+      if (lang === null) {
+        // Switch to system language
+        await AsyncStorage.removeItem("user-language");
+        let systemLang = Localization.getLocales()[0]?.languageCode ?? "en";
+        if (systemLang.startsWith("zh")) {
+          systemLang = "zh";
+        }
+        await i18n.changeLanguage(systemLang);
+        setIsSystemLanguage(true);
+      } else {
+        await i18n.changeLanguage(lang);
+        await AsyncStorage.setItem("user-language", lang);
+        setIsSystemLanguage(false);
+      }
+    },
+    [i18n],
+  );
+
   React.useEffect(() => {
     if (isPending) {
       return;
@@ -197,7 +250,7 @@ export default function UserPage() {
   if (isPending && !currentUser) {
     return (
       <LoadingContainer>
-        <Text>Loading user...</Text>
+        <Text>{t("common.loading")}</Text>
       </LoadingContainer>
     );
   }
@@ -207,7 +260,7 @@ export default function UserPage() {
       <LoginContainer>
         <GoogleOneTap />
         <LoginTitle>
-          尚未登录
+          {t("user.notLoggedIn")}
         </LoginTitle>
         <ButtonGroup>
           <GithubButton
@@ -217,7 +270,7 @@ export default function UserPage() {
             disabled={loadingProvider !== null}
           >
             <GithubButtonText>
-              使用 GitHub 登录
+              {t("common.continueWith", { provider: "GitHub" })}
             </GithubButtonText>
           </GithubButton>
           <GoogleButton
@@ -227,28 +280,56 @@ export default function UserPage() {
             disabled={loadingProvider !== null}
           >
             <GoogleButtonText>
-              使用 Google 登录
+              {t("common.continueWith", { provider: "Google" })}
             </GoogleButtonText>
           </GoogleButton>
         </ButtonGroup>
         {loadingProvider && (
           <LoadingText>
-            正在跳转 {loadingProvider === "github" ? "GitHub" : "Google"} 授权页面…
+            {t("common.redirecting", {
+              provider: loadingProvider === "github" ? "GitHub" : "Google",
+            })}
           </LoadingText>
         )}
+        <LanguageContainer>
+          <LanguageButton
+            active={!isSystemLanguage && i18n.language === "en"}
+            onPress={() => {
+              void changeLanguage("en");
+            }}
+          >
+            <LanguageText active={!isSystemLanguage && i18n.language === "en"}>English</LanguageText>
+          </LanguageButton>
+          <LanguageButton
+            active={!isSystemLanguage && i18n.language === "zh"}
+            onPress={() => {
+              void changeLanguage("zh");
+            }}
+          >
+            <LanguageText active={!isSystemLanguage && i18n.language === "zh"}>中文</LanguageText>
+          </LanguageButton>
+          <LanguageButton
+            active={isSystemLanguage}
+            onPress={() => {
+              void changeLanguage(null);
+            }}
+          >
+            <LanguageText active={isSystemLanguage}>{t("user.system")}</LanguageText>
+          </LanguageButton>
+        </LanguageContainer>
       </LoginContainer>
     );
   }
 
   return (
     <UserContainer>
-      <UserTitle>用户信息</UserTitle>
+      <UserTitle>{t("user.profile")}</UserTitle>
       <UserInfo>
-        <UserInfoText>ID: {currentUser.id}</UserInfoText>
+        <UserInfoText>{t("user.id")}: {currentUser.id}</UserInfoText>
         {currentUser.email ? (
-          <UserInfoText>邮箱: {currentUser.email}</UserInfoText>
+          <UserInfoText>{t("user.email")}: {currentUser.email}</UserInfoText>
         ) : null}
-        {displayName ? <UserInfoText>昵称: {displayName}</UserInfoText> : null}
+        {displayName ? <UserInfoText>{t("user.name")}: {displayName}</UserInfoText> : null}
       </UserInfo>
       <LogoutButton
         onPress={() => {
@@ -256,9 +337,35 @@ export default function UserPage() {
         }}
       >
         <LogoutButtonText>
-          退出登录
+          {t("common.logout")}
         </LogoutButtonText>
       </LogoutButton>
+      <LanguageContainer>
+        <LanguageButton
+          active={!isSystemLanguage && i18n.language === "en"}
+          onPress={() => {
+            void changeLanguage("en");
+          }}
+        >
+          <LanguageText active={!isSystemLanguage && i18n.language === "en"}>English</LanguageText>
+        </LanguageButton>
+        <LanguageButton
+          active={!isSystemLanguage && i18n.language === "zh"}
+          onPress={() => {
+            void changeLanguage("zh");
+          }}
+        >
+          <LanguageText active={!isSystemLanguage && i18n.language === "zh"}>中文</LanguageText>
+        </LanguageButton>
+        <LanguageButton
+          active={isSystemLanguage}
+          onPress={() => {
+            void changeLanguage(null);
+          }}
+        >
+          <LanguageText active={isSystemLanguage}>{t("user.system")}</LanguageText>
+        </LanguageButton>
+      </LanguageContainer>
     </UserContainer>
   );
 }

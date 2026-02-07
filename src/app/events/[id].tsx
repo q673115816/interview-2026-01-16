@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
+import { useTranslation } from "react-i18next";
 
 import { useEventQuery } from "@/api";
 import { EventRoot } from "@/api/types";
@@ -251,6 +252,7 @@ const formatTime = (timeStr?: string) => {
 };
 
 export default function EventDetailPage() {
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{ id?: string }>();
   const id = params.id ?? "";
 
@@ -283,7 +285,7 @@ export default function EventDetailPage() {
   if (!id) {
     return (
       <CenterContainer>
-        <ErrorText>Missing event id.</ErrorText>
+        <ErrorText>{t("common.missingEventId")}</ErrorText>
       </CenterContainer>
     );
   }
@@ -299,7 +301,7 @@ export default function EventDetailPage() {
   if (isError || !data) {
     return (
       <CenterContainer>
-        <ErrorText>无法加载活动详情，请稍后重试。</ErrorText>
+        <ErrorText>{t("common.errorLoadingEventDetails")}</ErrorText>
       </CenterContainer>
     );
   }
@@ -371,7 +373,7 @@ export default function EventDetailPage() {
             <InfoRow>
               <Ionicons name="calendar-outline" size={24} color="#2563EB" />
               <InfoContent>
-                <Label>日期与时间</Label>
+                <Label>{t("event.dateTime")}</Label>
                 <Value>{formatDate(date)}</Value>
                 {time && <Value>{formatTime(time)}</Value>}
               </InfoContent>
@@ -382,7 +384,7 @@ export default function EventDetailPage() {
             <InfoRow>
               <Ionicons name="location-outline" size={24} color="#2563EB" />
               <InfoContent>
-                <Label>场馆</Label>
+                <Label>{t("event.venue")}</Label>
                 <Value style={{ fontWeight: "600" }}>{venue?.name}</Value>
                 <Value>
                   {[venue?.address?.line1, venue?.city?.name, venue?.state?.name]
@@ -411,7 +413,7 @@ export default function EventDetailPage() {
             <Card>
               <SectionHeader>
                 <Ionicons name="people-outline" size={20} color="#111827" />
-                <SectionTitle>演出阵容</SectionTitle>
+                <SectionTitle>{t("event.lineup")}</SectionTitle>
               </SectionHeader>
               {attractions.map((attraction, index) => (
                 <React.Fragment key={attraction.id}>
@@ -438,13 +440,13 @@ export default function EventDetailPage() {
           <Card>
             <SectionHeader>
               <Ionicons name="ticket-outline" size={20} color="#111827" />
-              <SectionTitle>票务信息</SectionTitle>
+              <SectionTitle>{t("event.ticketInfo")}</SectionTitle>
             </SectionHeader>
 
             {priceRanges?.length > 0 && (
               <InfoRow>
                 <InfoContent>
-                  <Label>价格区间</Label>
+                  <Label>{t("event.priceRange")}</Label>
                   {priceRanges.map((range: any, idx: number) => (
                     <Value key={idx}>
                       {range.min} - {range.max} {range.currency}
@@ -457,7 +459,7 @@ export default function EventDetailPage() {
             {salesPublic && (
               <InfoRow>
                 <InfoContent>
-                  <Label>公开发售时间</Label>
+                  <Label>{t("event.publicSaleTime")}</Label>
                   <Value>
                     {new Date(salesPublic.startDateTime).toLocaleString()}
                   </Value>
@@ -467,7 +469,7 @@ export default function EventDetailPage() {
 
             {presales.length > 0 && (
               <>
-                <Label>预售活动</Label>
+                <Label>{t("event.presaleEvents")}</Label>
                 {presales.map((pre, idx) => (
                   <Value key={idx} style={{ fontSize: 13, marginBottom: 4 }}>
                     • {pre.name}: {new Date(pre.startDateTime).toLocaleDateString()}
@@ -478,7 +480,7 @@ export default function EventDetailPage() {
 
             {data.ticketLimit?.info && (
               <NoteText style={{ marginTop: 8 }}>
-                限购政策: {data.ticketLimit.info}
+                {t("event.ticketLimit")}: {data.ticketLimit.info}
               </NoteText>
             )}
           </Card>
@@ -492,13 +494,13 @@ export default function EventDetailPage() {
                   size={20}
                   color="#111827"
                 />
-                <SectionTitle>其他信息</SectionTitle>
+                <SectionTitle>{t("event.additionalInfo")}</SectionTitle>
               </SectionHeader>
 
               {promoter && (
                 <InfoRow>
                   <InfoContent>
-                    <Label>主办方</Label>
+                    <Label>{t("event.promoter")}</Label>
                     <Value>{promoter}</Value>
                   </InfoContent>
                 </InfoRow>
@@ -507,14 +509,14 @@ export default function EventDetailPage() {
               {data.info && (
                 <InfoRow>
                   <InfoContent>
-                    <Label>活动简介</Label>
+                    <Label>{t("event.eventInfo")}</Label>
                     <Value>{data.info}</Value>
                   </InfoContent>
                 </InfoRow>
               )}
 
               {data.pleaseNote && (
-                <NoteText>注意: {data.pleaseNote}</NoteText>
+                <NoteText>{t("event.pleaseNote")}: {data.pleaseNote}</NoteText>
               )}
             </Card>
           )}
@@ -524,7 +526,7 @@ export default function EventDetailPage() {
             <Card>
               <SectionHeader>
                 <Ionicons name="map-outline" size={20} color="#111827" />
-                <SectionTitle>座位图</SectionTitle>
+                <SectionTitle>{t("event.seatmap")}</SectionTitle>
               </SectionHeader>
               <SeatmapImage
                 source={{ uri: data.seatmap.staticUrl }}
@@ -539,7 +541,7 @@ export default function EventDetailPage() {
       <Footer>
         <BuyButton onPress={handleBuyTickets} activeOpacity={0.8}>
           <Ionicons name="cart-outline" size={20} color="white" />
-          <BuyButtonText>购买门票</BuyButtonText>
+          <BuyButtonText>{t("event.buyTickets")}</BuyButtonText>
         </BuyButton>
       </Footer>
     </Container>
